@@ -16,10 +16,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   startTimeout(SharedPreferences value) {
-    if(value.getString('id') == null){
+    if (value.getString('id') == null) {
       return Timer(Duration(seconds: 2), changeScreen);
-    }
-    else{
+    } else {
       return Timer(Duration(seconds: 2), changeScreen1);
     }
   }
@@ -33,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
   changeScreen1() async {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -47,20 +47,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIOverlays([]);
-    SharedPreferences.getInstance().then((value) => {
-      startTimeout(value)
-    });
-    
+    SharedPreferences.getInstance().then((value) => {startTimeout(value)});
   }
 
   @override
   Widget build(BuildContext context) {
-    socketIO = SocketIOManager().createSocketIO(
-      'http://$myIP:3002',
-      '/',
-    );
-    socketIO.init();
-    socketIO.connect();
+    // socketIO = SocketIOManager().createSocketIO(
+    //   'http://$myIP:3002',
+    //   '/',
+    // );
+    // socketIO.init();
+    // socketIO.connect();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
@@ -75,22 +72,22 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 150,
                 height: 150,
               ),
-              SizedBox(width: 40.0),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                  top: 15.0,
-                ),
-                child: Text(
-                  'Welcome to Trafit',
-//                  "${Constants.appName}",
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
+              //       SizedBox(width: 40.0),
+//               Container(
+//                 alignment: Alignment.center,
+//                 margin: EdgeInsets.only(
+//                   top: 15.0,
+//                 ),
+//                 child: Text(
+//                   'Trafit',
+// //                  "${Constants.appName}",
+//                   style: TextStyle(
+//                     fontSize: 50.0,
+//                     fontWeight: FontWeight.w700,
+//                     color: Theme.of(context).accentColor,
+//                   ),
+//                 ),
+//               ),
             ],
           ),
         ),
