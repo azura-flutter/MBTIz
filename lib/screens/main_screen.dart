@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trafit/screens/cart.dart';
 import 'package:trafit/screens/home.dart';
 import 'package:trafit/screens/notifications.dart';
@@ -22,123 +23,132 @@ class _MainScreenState extends State<MainScreen> {
   PageController _pageController;
   int _page = 0;
 
+  final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  static DateTime currentBackPressTime;
+
+  _isEnd() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      _globalKey.currentState
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text('종료하려면 한 번 더 눌러주세요.'),
+        ));
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("종료하시겠습니까?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("네"),
+                onPressed: () =>
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+              ),
+              FlatButton(
+                child: Text("아니오"),
+                onPressed: () => Navigator.pop(context, false),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()=>Future.value(false),
+      onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            Constants.appName,
-          ),
-          elevation: 0.0,
-          actions: <Widget>[
-          ],
-        ),
-
-        body: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          children: <Widget>[
-            Home(),
-            userInChatScreen(),
-            chatSearchScreen(""),
-            CartScreen(),
-            Profile(),
-          ],
-        ),
-
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: PageView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: _pageController,
+            onPageChanged: onPageChanged,
             children: <Widget>[
-              SizedBox(width:7),
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 24.0,
-                ),
-                color: _page == 0
-                    ? Theme.of(context).accentColor
-                    : Theme
-                    .of(context)
-                    .textTheme.caption.color,
-                onPressed: ()=>_pageController.jumpToPage(0),
-              ),
-
-              IconButton(
-                icon:Icon(
-                  Icons.message,
-                  size: 24.0,
-                ),
-                color: _page == 1
-                    ? Theme.of(context).accentColor
-                    : Theme
-                    .of(context)
-                    .textTheme.caption.color,
-                onPressed: ()=>_pageController.jumpToPage(1),
-              ),
-
-//              IconButton(
-//                icon: Icon(
-//                  Icons.search,
-//                  size: 24.0,
-//                  color: Theme.of(context).primaryColor,
-//                ),
-//                color: _page == 2
-//                    ? Theme.of(context).accentColor
-//                    : Theme
-//                    .of(context)
-//                    .textTheme.caption.color,
-//                onPressed: ()=>_pageController.jumpToPage(2),
-//              ),
-
-//              IconButton(
-//                icon: IconBadge(
-//                  icon: Icons.search,
-//                  size: 24.0,
-//                ),
-//                color: _page == 3
-//                    ? Theme.of(context).accentColor
-//                    : Theme
-//                    .of(context)
-//                    .textTheme.caption.color,
-//                onPressed: ()=>_pageController.jumpToPage(2),
-//              ),
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  size: 24.0,
-                ),
-                color: _page == 2
-                    ? Theme.of(context).accentColor
-                    : Theme
-                    .of(context)
-                    .textTheme.caption.color,
-                onPressed: ()=>_pageController.jumpToPage(2),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 24.0,
-                ),
-                color: _page == 4
-                    ? Theme.of(context).accentColor
-                    : Theme
-                    .of(context)
-                    .textTheme.caption.color,
-                onPressed: ()=>_pageController.jumpToPage(4),
-              ),
-
-              SizedBox(width:7),
+              Home(),
+              userInChatScreen(),
+              chatSearchScreen(""),
+              CartScreen(),
+              Profile(),
             ],
           ),
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
+        ),
+
+        // body: PageView(
+        //   physics: NeverScrollableScrollPhysics(),
+        //   controller: _pageController,
+        //   onPageChanged: onPageChanged,
+        //   children: <Widget>[
+        //     Home(),
+        //     userInChatScreen(),
+        //     chatSearchScreen(""),
+        //     CartScreen(),
+        //     Profile(),
+        //   ],
+        // ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 50,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.home,
+                    size: 30.0,
+                  ),
+                  color: _page == 0
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).textTheme.caption.color,
+                  onPressed: () => _pageController.jumpToPage(0),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.forum,
+                    size: 30.0,
+                  ),
+                  color: _page == 1
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).textTheme.caption.color,
+                  onPressed: () => _pageController.jumpToPage(1),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    size: 30.0,
+                  ),
+                  color: _page == 2
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).textTheme.caption.color,
+                  onPressed: () => _pageController.jumpToPage(2),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.person,
+                    size: 30.0,
+                  ),
+                  color: _page == 4
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).textTheme.caption.color,
+                  onPressed: () => _pageController.jumpToPage(4),
+                ),
+              ],
+            ),
+            color: Theme.of(context).primaryColor,
+            //shape: CircularNotchedRectangle(),
+          ),
         ),
 //        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
 //        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -149,7 +159,6 @@ class _MainScreenState extends State<MainScreen> {
 //          ),
 //          onPressed: ()=>_pageController.jumpToPage(2),
 //        ),//검색 아이콘(center)
-
       ),
     );
   }
@@ -182,11 +191,12 @@ class _MainScreenState extends State<MainScreen> {
       this._page = page;
     });
   }
+
   void firebaseCloudMessaging_Listeners() {
     if (Platform.isIOS) iOS_Permission();
 
-    _firebaseMessaging.getToken().then((token){
-      print('token:'+token);
+    _firebaseMessaging.getToken().then((token) {
+      print('token:' + token);
     });
 
     _firebaseMessaging.configure(
@@ -204,14 +214,10 @@ class _MainScreenState extends State<MainScreen> {
 
   void iOS_Permission() {
     _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true)
-    );
+        IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings)
-    {
+        .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
   }
-
-
 }
