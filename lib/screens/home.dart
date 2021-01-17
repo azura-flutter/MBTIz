@@ -8,14 +8,12 @@ import 'package:trafit/util/travel_spots.dart';
 import 'package:trafit/util/categories.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
-
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -27,39 +25,34 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
 
   int _current = 0;
 
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+        padding: EdgeInsets.all(0),
         child: ListView(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "여행지",
+                  "지금 뜨는 여행지",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-
-                FlatButton(
+                InkWell(
                   child: Text(
-                    "View More",
+                    "더보기",
                     style: TextStyle(
-//                      fontSize: 22,
-//                      fontWeight: FontWeight.w800,
-                      color: Theme
-                          .of(context)
-                          .accentColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Theme.of(context).accentColor,
                     ),
                   ),
-                  onPressed: () {
+                  onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
@@ -77,13 +70,10 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             //Slider Here
 
             CarouselSlider(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 2.6,
+              height: MediaQuery.of(context).size.height / 2.6,
               items: map<Widget>(
                 travel_spots,
-                    (index, i) {
+                (index, i) {
                   Map travel_spot = travel_spots[index];
                   return SliderItem(
                     img: travel_spot['img'],
@@ -107,18 +97,17 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               },
             ),
 
-
             Text(
               "패키지 여행",
               style: TextStyle(
-                fontSize: 23,
+                fontSize: 20,
                 fontWeight: FontWeight.w800,
               ),
             ),
             SizedBox(height: 10.0),
 
             Container(
-              height: 65.0,
+              height: 60.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
@@ -129,7 +118,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                     icon: cat['icon'],
                     title: cat['name'],
                     items: cat['items'].toString(),
-                    category_num : cat['category_num'],
+                    category_num: cat['category_num'],
                     img: cat['img'],
                     isHome: true,
                   );
@@ -143,7 +132,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "인기 여행지",
+                  "MBTI 찾기",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -172,15 +161,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               primary: false,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: MediaQuery
-                    .of(context)
-                    .size
-                    .width /
-                    (MediaQuery
-                        .of(context)
-                        .size
-                        .height / 1.4),
+                crossAxisCount: 4,
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height),
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
               ),
               itemCount: popular_spots == null ? 0 : popular_spots.length,
               itemBuilder: (BuildContext context, int index) {
@@ -198,8 +183,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                 );
               },
             ),
-
-            SizedBox(height: 30),
+            SizedBox(height: 20.0),
           ],
         ),
       ),
