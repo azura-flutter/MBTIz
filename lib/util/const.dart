@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-class Constants{
 
+class Constants {
   static String appName = "Trafit";
 
   //Colors for theme
 //  Color(0xfffcfcff);
   static Color lightPrimary = Color(0xfffcfcff);
   static Color darkPrimary = Colors.black;
-  static Color lightAccent = Colors.red;
-  static Color darkAccent = Colors.red[400];
+  static Color lightAccent = Color(0xff4398d1);
+  static Color darkAccent = Color(0xff29638f);
   static Color lightBG = Color(0xfffcfcff);
   static Color darkBG = Colors.black;
   static Color ratingBG = Colors.yellow[600];
@@ -16,7 +16,7 @@ class Constants{
   static ThemeData lightTheme = ThemeData(
     backgroundColor: lightBG,
     primaryColor: lightPrimary,
-    accentColor:  lightAccent,
+    accentColor: lightAccent,
     cursorColor: lightAccent,
     scaffoldBackgroundColor: lightBG,
     appBarTheme: AppBarTheme(
@@ -53,6 +53,4 @@ class Constants{
 //      ),
     ),
   );
-
-
 }
