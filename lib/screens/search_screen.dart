@@ -37,14 +37,13 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
   Future<List> rooms2;
   final TextEditingController _searchControl = new TextEditingController();
 
-
   List response;
   bool _isComposing = false;
 
   DateTime _currentDate = DateTime.now().subtract(Duration(days: 2));
   DateTime _currentDate2 = DateTime.now().subtract(Duration(days: 2));
   String _currentMonth = DateFormat.yM().format(DateTime.now());
-  DateTime _targetDateTime = DateTime(2020, 6, 3);
+  DateTime _targetDateTime = DateTime(2021, 1, 28);
 
 //  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
   static Widget _eventIcon = new Container(
@@ -67,11 +66,15 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
   @override
   void initState() {
     DateTime now = DateTime.now();
-    if(now.month<10)searchMonth =DateFormat('0M').format(now).toString();
-    else searchMonth =DateFormat('M').format(now).toString();
+    if (now.month < 10)
+      searchMonth = DateFormat('0M').format(now).toString();
+    else
+      searchMonth = DateFormat('M').format(now).toString();
 
-    if(now.day<10)searchDay =DateFormat('0d').format(now).toString();
-    else searchDay =DateFormat('d').format(now).toString();
+    if (now.day < 10)
+      searchDay = DateFormat('0d').format(now).toString();
+    else
+      searchDay = DateFormat('d').format(now).toString();
 
     print(searchMonth + searchDay);
     super.initState();
@@ -173,10 +176,9 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
   Widget body(List rooms) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+        padding: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0),
         child: ListView(
           children: <Widget>[
-            SizedBox(height: 10.0),
             Card(
               elevation: 3.0,
               child: Container(
@@ -187,7 +189,7 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(13.0, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
                   child: Row(
                     children: <Widget>[
                       Flexible(
@@ -210,7 +212,7 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                               ),
                               borderRadius: BorderRadius.circular(5.0),
                             ),
-                            hintText: "Search...",
+                            hintText: "채팅방 검색",
                             hintStyle: TextStyle(
                               fontSize: 15.0,
                               color: Colors.grey,
@@ -230,15 +232,15 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                         ),
                       ),
                       Container(
-                        width: 100,
-                        height: 40,
+                        width: 90,
+                        height: 45,
                         child: Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 20.0),
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 20.0),
                           child: IconButton(
                             icon: Icon(
                               Icons.search,
-                              size: 24.0,
+                              size: 30.0,
                             ),
 //              icon: IconBadge(
 //                icon: Icons.notifications,
@@ -377,8 +379,8 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                     margin: EdgeInsets.only(
                       top: 10.0,
                       bottom: 10.0,
-                      left: 16.0,
-                      right: 16.0,
+                      left: 0.0,
+                      right: 0.0,
                     ),
                     child: new Row(
                       children: <Widget>[
@@ -389,7 +391,7 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                               _currentMonth,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 21.0,
+                                fontSize: 20.0,
                               ),
                             ),
                             SizedBox(
@@ -405,22 +407,12 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16.0),
                     child: _calendarCarouselNoHeader,
                   ), //
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                "검색결과",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
+
             ListView.builder(
               shrinkWrap: true,
               primary: false,
@@ -430,7 +422,7 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                 Map chatroom = rooms[index];
                 if (chatroom['start_date'] == null)
                   chatroom['start_date'] = '0101';
-                if (chatroom['end_date'] == null){
+                if (chatroom['end_date'] == null) {
                   chatroom['end_date'] = '1231';
                 }
                 if (rooms.length != 0 &&
@@ -439,9 +431,16 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                         int.parse(searchMonth + searchDay) &&
                     int.parse(chatroom['end_date'].toString()) >=
                         int.parse(searchMonth + searchDay)) {
-                  DateTime startTime = DateTime(0, int.parse(chatroom['start_date'].substring(0,2)), int.parse(chatroom['start_date'].substring(2,4)));
-                  String start = DateFormat('M월d일').format(startTime).toString();
-                  DateTime endTime = DateTime(0, int.parse(chatroom['end_date'].substring(0,2)), int.parse(chatroom['end_date'].substring(2,4)));
+                  DateTime startTime = DateTime(
+                      0,
+                      int.parse(chatroom['start_date'].substring(0, 2)),
+                      int.parse(chatroom['start_date'].substring(2, 4)));
+                  String start =
+                      DateFormat('M월d일').format(startTime).toString();
+                  DateTime endTime = DateTime(
+                      0,
+                      int.parse(chatroom['end_date'].substring(0, 2)),
+                      int.parse(chatroom['end_date'].substring(2, 4)));
                   String end = DateFormat('M월d일').format(endTime).toString();
                   print("asvas" + searchMonth + searchDay);
                   ImageProvider c;
@@ -463,8 +462,57 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                         borderRadius: BorderRadius.circular(10.0)),
                     elevation: 4.0,
                     child: ListTile(
+                      onTap: () async {
+                        SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        Map<String, dynamic> isDeny =
+                            await apiService.deny_check(chatroom['room_num'],
+                                sharedPreferences.getString('id'));
+                        if (isDeny['message']) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: Text('강퇴된 채팅방입니다.'),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('닫기'),
+                                    )
+                                  ],
+                                );
+                              });
+                        } else {
+                          String roomNumber =
+                              sharedPreferences.getString('room_num');
+                          if (roomNumber == null)
+                            roomNumber = "${chatroom['room_num']}";
+                          else
+                            roomNumber =
+                                roomNumber + ",${chatroom['room_num']}";
+                          sharedPreferences.setString('room_num', roomNumber);
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return ChatPage(
+                                    chatroom['room_num'], chatroom['category']);
+                              },
+                            ),
+                          );
+                        }
+                      },
                       leading: CircleAvatar(radius: 25.0, backgroundImage: c),
-                      title: Text("${chatroom['bossname']}"),
+                      title: Column(children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Row(
+                              children: [Text("${chatroom['bossname']}")],
+                            ))
+                      ]),
                       subtitle: Column(
                         children: <Widget>[
                           Row(
@@ -479,112 +527,31 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                             ],
                           ),
                           SizedBox(height: 10),
-                         Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Row(
-                                children: [
-                                  Text('여행지:  ',style: TextStyle(color: Colors.black)),
-                                  Text("$spot",style: TextStyle(color: Colors.black)),
-                                ],
-                              ),
-
-                          ),
                           Padding(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(0),
                             child: Row(
                               children: [
-                                Text('여행일:  ',style: TextStyle(color: Colors.black)),
-                                Text("$start 부터 $end 까지",style: TextStyle(color: Colors.black)),
+                                Text("$spot  ",
+                                    style: TextStyle(color: Colors.black)),
+                                Text("$start ~ $end ",
+                                    style: TextStyle(color: Colors.black)),
                               ],
                             ),
                           ),
-//                          Card(
-//                            child: Row(
-//                              children: [
-//                                Text('여행일:  '),
-//                                Text("${chatroom['start_date']} ~ ${chatroom['end_date']}"),
-//                              ],
-//                            ),
-//                          ),
-                         Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Row(
-                                children: [
-                                  Text('내용:  ',
-                                  style: TextStyle(color: Colors.black)),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio / 5.0,
-                                    child: Text(chatroom['comment'],
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 70.0, 0),
-                            child: Container(
-                              child: FlatButton(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      MediaQuery.of(context).devicePixelRatio /
+                                      5.0,
                                   child: Text(
-                                    "채팅방 입장",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.white,
-                                    ),
+                                    chatroom['comment'],
+                                    style: TextStyle(color: Colors.black),
                                   ),
-                                  color: Colors.indigo[300],
-                                  textColor: Colors.white,
-                                  onPressed: () async {
-                                    SharedPreferences sharedPreferences =
-                                        await SharedPreferences.getInstance();
-                                    Map<String, dynamic> isDeny =
-                                        await apiService.deny_check(
-                                        chatroom['room_num'],
-                                        sharedPreferences
-                                            .getString('id'));
-                                    if (isDeny['message']) {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text('알림'),
-                                              content: Text('강퇴된 채팅방입니다.'),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop();
-                                                  },
-                                                  child: Text('닫기'),
-                                                )
-                                              ],
-                                            );
-                                          });
-                                    } else {
-                                      String roomNumber = sharedPreferences
-                                          .getString('room_num');
-                                      if (roomNumber == null)
-                                        roomNumber =
-                                        "${chatroom['room_num']}";
-                                      else
-                                        roomNumber = roomNumber +
-                                            ",${chatroom['room_num']}";
-                                      sharedPreferences.setString(
-                                          'room_num', roomNumber);
-
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                            return ChatPage(
-                                                chatroom['room_num'],
-                                                chatroom['category']);
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  }),
+                                ),
+                              ],
                             ),
                           ),
                         ],

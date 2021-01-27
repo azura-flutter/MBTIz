@@ -26,7 +26,7 @@ class _FindPasswordScreenState extends State<FindPasswordScreen> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 0, bottom: 0, left: 20.0, right: 20.0),
+        margin: EdgeInsets.only(top: 0, bottom: 50, left: 20.0, right: 20.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
