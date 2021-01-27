@@ -54,40 +54,6 @@ class _userInChatScreenState extends State<userInChatScreen> {
         child: ListView(
           children: <Widget>[
             SizedBox(height: 10.0),
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height / 3.2,
-                  width: MediaQuery.of(context).size.width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      "assets/paris.jpg",
-//                      "${foods[0]['img']}",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-//                Positioned(
-//                  right: -10.0,
-//                  bottom: 3.0,
-//                  child: RawMaterialButton(
-//                    onPressed: () {},
-//                    fillColor: Colors.white,
-//                    shape: CircleBorder(),
-//                    elevation: 4.0,
-//                    child: Padding(
-//                      padding: EdgeInsets.all(5),
-//                      child: Icon(
-//                        isFav ? Icons.favorite : Icons.favorite_border,
-//                        color: Colors.red,
-//                        size: 17,
-//                      ),
-//                    ),
-//                  ),
-//                ),
-              ],
-            ),
             SizedBox(height: 10.0),
             Text(
               userName + '님의 참여 채팅방',
@@ -110,27 +76,20 @@ class _userInChatScreenState extends State<userInChatScreen> {
 //                    size: 10.0,
 //                  ),
 //                  SizedBox(width: 10.0),
-                  Text(
-                    "(${rooms.length}개의 게시글)",
-                    style: TextStyle(
-                      fontSize: 11.0,
-                    ),
-                  ),
                 ],
               ),
             ),
             SizedBox(height: 10.0),
             Text(
-              "게시글",
+              "${rooms.length}개의 게시글",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w800,
               ),
-              maxLines: 2,
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+              padding: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0),
               child: ListView.builder(
                 shrinkWrap: true,
                 primary: false,
@@ -144,7 +103,7 @@ class _userInChatScreenState extends State<userInChatScreen> {
                         int.parse(chatroom['start_date'].substring(0, 2)),
                         int.parse(chatroom['start_date'].substring(2, 4)));
                     String start =
-                    DateFormat('M월d일').format(startTime).toString();
+                        DateFormat('M월d일').format(startTime).toString();
                     DateTime endTime = DateTime(
                         0,
                         int.parse(chatroom['end_date'].substring(0, 2)),
@@ -155,15 +114,12 @@ class _userInChatScreenState extends State<userInChatScreen> {
                             ['name'];
                     ImageProvider c;
                     if (chatroom['img'] == 'x') {
-                      if(chatroom['bossmbti'] != null){
+                      if (chatroom['bossmbti'] != null) {
                         c = Image.asset(
-                            'assets/mbti/' + chatroom['bossmbti'] + '.png')
+                                'assets/mbti/' + chatroom['bossmbti'] + '.png')
                             .image;
-                      }
-                      else{
-                        c = Image.asset(
-                            'assets/person.png')
-                            .image;
+                      } else {
+                        c = Image.asset('assets/person.png').image;
                       }
                     } else {
                       c = CachedNetworkImageProvider(
@@ -227,8 +183,12 @@ class _userInChatScreenState extends State<userInChatScreen> {
                                   Text('내용:  ',
                                       style: TextStyle(color: Colors.black)),
                                   Container(
-                                    width: MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio / 5.0,
-                                    child: Text(chatroom['comment'],
+                                    width: MediaQuery.of(context).size.width *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio /
+                                        5.0,
+                                    child: Text(
+                                      chatroom['comment'],
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -238,7 +198,9 @@ class _userInChatScreenState extends State<userInChatScreen> {
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0, 50.0, 0),
                               child: Container(
-                                width: MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio / 5.0,
+                                width: MediaQuery.of(context).size.width *
+                                    MediaQuery.of(context).devicePixelRatio /
+                                    5.0,
                                 child: Row(
                                   children: [
                                     FlatButton(
