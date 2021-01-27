@@ -32,7 +32,7 @@ class _FindIDScreenState extends State<FindIDScreen> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 0, bottom: 0, left: 20.0, right: 20.0),
+        margin: EdgeInsets.only(top: 0, bottom: 50, left: 20.0, right: 20.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +41,7 @@ class _FindIDScreenState extends State<FindIDScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '본인확인을 위한 이메일 주소 인증이 필요합니다.',
+                  '본인확인을 위한 휴대전화 인증이 필요합니다.',
 //                  "${Constants.appName}",
                   style: TextStyle(
                     fontSize: 17.0,
@@ -132,7 +132,7 @@ class _FindIDScreenState extends State<FindIDScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
-                              hintText: "이메일",
+                              hintText: "010-0000-0000",
                               hintStyle: TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.grey,

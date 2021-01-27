@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trafit/screens/login.dart';
 
 ApiService apiService = new ApiService();
 
@@ -41,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 100, 20, 0),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
@@ -259,7 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               borderRadius: BorderRadius.circular(5.0),
                             ),
-                            hintText: "이메일",
+                            hintText: "010-0000-0000",
                             hintStyle: TextStyle(
                               fontSize: 15.0,
                               color: Colors.grey,
@@ -619,46 +620,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 onPressed: () async {
                   //중복체크 했고, 인증 완료 되었을 때 가입 가능한 조건문
-                  if (emailauthCheck == 1) {
-                    Map<String, dynamic> response = await apiService.register(
-                        _useridControl.text,
-                        _usernameControl.text,
-                        _emailControl.text,
-                        _passwordControl.text,
-                        genderCheck,
-                        int.parse(dropdownValue_age),
-                        _introduceControl.text,
-                        null,
-                        null,
-                        null);
-                    Fluttertoast.showToast(
-                      msg: response['message'],
-                      toastLength: Toast.LENGTH_LONG,
-                    );
-                  }
+                  //if (emailauthCheck == 1) {
+                  Map<String, dynamic> response = await apiService.register(
+                      _useridControl.text,
+                      _usernameControl.text,
+                      _emailControl.text,
+                      _passwordControl.text,
+                      genderCheck,
+                      int.parse(dropdownValue_age),
+                      _introduceControl.text,
+                      null,
+                      null,
+                      null);
+                  Fluttertoast.showToast(
+                    msg: response['message'],
+                    toastLength: Toast.LENGTH_LONG,
+                  );
 
-//                user.add(
-//                  {
-//                    "id": "$_useridControl",
-//                    "email": "$_emailControl",
-//                    "password": "$_passwordControl",
-//                    "introduce": null,
-//                    "age":"$dropdownValue_age",
-//                    "gender": "$dropdownValue_gender",
-//                    "email_auth_flag":"true",
-//                    "room_num":"1",//속해 있는 채팅방 번호
-//                    "mbti": null,
-//                  }
-//                );
+                  // }
 
                   //회원가입 정보 User.dart의 user에 저장 후 json 변환
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(
-//                    builder: (BuildContext context) {
-//                      return MainScreen();
-//                    },
-//                  ),
-//                );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return LoginScreen();
+                      },
+                    ),
+                  );
                 },
                 color: Theme.of(context).accentColor,
               ),
