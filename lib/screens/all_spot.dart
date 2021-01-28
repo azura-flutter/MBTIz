@@ -4,7 +4,6 @@ import 'package:trafit/util/travel_spots.dart';
 import 'package:trafit/widgets/badge.dart';
 import 'package:trafit/widgets/grid_product.dart';
 
-
 class DishesScreen extends StatefulWidget {
   @override
   _DishesScreenState createState() => _DishesScreenState();
@@ -20,25 +19,19 @@ class _DishesScreenState extends State<DishesScreen> {
           icon: Icon(
             Icons.keyboard_backspace,
           ),
-          onPressed: ()=>Navigator.pop(context),
+          onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: Text(
-          "모든 여행지",
+          "지금 뜨는 MBTIz",
         ),
         elevation: 0.0,
-        actions: <Widget>[
-        ],
+        actions: <Widget>[],
       ),
-
       body: Padding(
-          padding: EdgeInsets.fromLTRB(10.0,0,10.0,0),
+        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: ListView(
-
           children: <Widget>[
-
             Divider(),
-
             GridView.builder(
               shrinkWrap: true,
               primary: false,
@@ -61,7 +54,6 @@ class _DishesScreenState extends State<DishesScreen> {
                 );
               },
             ),
-
           ],
         ),
       ),

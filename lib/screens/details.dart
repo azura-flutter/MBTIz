@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trafit/screens/ChatPage.dart';
 import 'package:trafit/screens/notifications.dart';
+import 'package:trafit/util/travel_spots.dart';
 import 'package:trafit/screens/post_screen.dart';
 import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
@@ -11,7 +12,7 @@ import 'package:intl/intl.dart';
 ApiService apiService = new ApiService();
 
 Future<List> call(String category) async {
-  return apiService.show_room(category);
+  return await apiService.show_room(category);
 }
 
 class ProductDetails extends StatefulWidget {
@@ -37,8 +38,10 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;;
-    double ratio = MediaQuery.of(context).devicePixelRatio;;
+    double phoneWidth = MediaQuery.of(context).size.width;
+
+    double ratio = MediaQuery.of(context).devicePixelRatio;
+
     return FutureBuilder<List>(
         future: rooms,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
@@ -62,88 +65,19 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: Text(
-          "동행 게시판",
+          widget._name + " 게시판",
         ),
         elevation: 0.0,
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: ListView(
           children: <Widget>[
             SizedBox(height: 10.0),
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height / 3.2,
-                  width: MediaQuery.of(context).size.width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      widget._img,
-//                      "${foods[0]['img']}",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-//                Positioned(
-//                  right: -10.0,
-//                  bottom: 3.0,
-//                  child: RawMaterialButton(
-//                    onPressed: () {},
-//                    fillColor: Colors.white,
-//                    shape: CircleBorder(),
-//                    elevation: 4.0,
-//                    child: Padding(
-//                      padding: EdgeInsets.all(5),
-//                      child: Icon(
-//                        isFav ? Icons.favorite : Icons.favorite_border,
-//                        color: Colors.red,
-//                        size: 17,
-//                      ),
-//                    ),
-//                  ),
-//                ),
-              ],
-            ),
-            SizedBox(height: 10.0),
             Text(
-              widget._name + ' 동행 게시판',
-//              "${foods[0]['name']}",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-              maxLines: 2,
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
-              child: Row(
-                children: <Widget>[
-//                  SmoothStarRating(
-//                    starCount: 5,
-//                    color: Constants.ratingBG,
-//                    allowHalfRating: true,
-//                    rating: 5.0,
-//                    size: 10.0,
-//                  ),
-//                  SizedBox(width: 10.0),
-                  Text(
-                    "(${rooms.length}개의 게시글)",
-                    style: TextStyle(
-                      fontSize: 11.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              "게시글",
+              "${rooms.length}개의 게시글",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -173,6 +107,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                         int.parse(chatroom['end_date'].substring(2, 4)));
                     String end = DateFormat('M월d일').format(endTime).toString();
                     ImageProvider c;
+                    String spot =
+                        travel_spots[int.parse(chatroom['category']) - 1]
+                            ['name'];
+
                     if (chatroom['img'] == 'x') {
                       if (chatroom['bossmbti'] != null)
                         c = Image.asset(
@@ -189,16 +127,57 @@ class _ProductDetailsState extends State<ProductDetails> {
                           borderRadius: BorderRadius.circular(10.0)),
                       elevation: 4.0,
                       child: ListTile(
-                        leading: Column(
-                          children: <Widget>[
-                            CircleAvatar(radius: 25.0, backgroundImage: c),
-                            Text(
-                              chatroom['bossmbti'] != null ? chatroom['bossmbti'] : 'x',
-                              style: TextStyle(fontSize: 5),
-                            )
-                          ],
-                        ),
-                        title: Text("${chatroom['bossname']}님의 게시글"),
+                        onTap: () async {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          Map<String, dynamic> isDeny =
+                              await apiService.deny_check(chatroom['room_num'],
+                                  sharedPreferences.getString('id'));
+                          if (isDeny['message']) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('알림'),
+                                    content: Text('강퇴된 채팅방입니다.'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('닫기'),
+                                      )
+                                    ],
+                                  );
+                                });
+                          } else {
+                            String roomNumber =
+                                sharedPreferences.getString('room_num');
+                            if (roomNumber == null)
+                              roomNumber = "${chatroom['room_num']}";
+                            else
+                              roomNumber =
+                                  roomNumber + ",${chatroom['room_num']}";
+                            sharedPreferences.setString('room_num', roomNumber);
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return ChatPage(chatroom['room_num'],
+                                      chatroom['category']);
+                                },
+                              ),
+                            );
+                          }
+                        },
+                        leading: CircleAvatar(radius: 25.0, backgroundImage: c),
+                        title: Column(children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Row(
+                                children: [Text("${chatroom['bossname']}")],
+                              ))
+                        ]),
                         subtitle: Column(
                           children: <Widget>[
                             Row(
@@ -212,96 +191,33 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 10),
                             Padding(
-                              padding: EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(0),
                               child: Row(
                                 children: [
-                                  Text('여행일:  ',
+                                  Text("$spot  ",
                                       style: TextStyle(color: Colors.black)),
-                                  Text("$start 부터 $end 까지",
+                                  Text("$start ~ $end ",
                                       style: TextStyle(color: Colors.black)),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 3.0),
                             Padding(
-                              padding: EdgeInsets.all(4),
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                               child: Row(
                                 children: [
-                                  Text('내용:  ',
-                                      style: TextStyle(color: Colors.black)),
                                   Container(
-                                    width: phoneWidth * ratio / 5.0,
-                                    child: Text(chatroom['comment'],
-                                        style: TextStyle(color: Colors.black),
+                                    width: MediaQuery.of(context).size.width *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio /
+                                        5.0,
+                                    child: Text(
+                                      chatroom['comment'],
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 70.0, 0),
-                              child: Container(
-                                width: 100,
-                                child: FlatButton(
-                                    child: Text(
-                                      "채팅방 입장",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    color: Colors.indigo[300],
-                                    onPressed: () async {
-                                      SharedPreferences sharedPreferences =
-                                          await SharedPreferences.getInstance();
-                                      Map<String, dynamic> isDeny =
-                                          await apiService.deny_check(
-                                              chatroom['room_num'],
-                                              sharedPreferences
-                                                  .getString('id'));
-                                      if (isDeny['message']) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text('알림'),
-                                                content: Text('강퇴된 채팅방입니다.'),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text('닫기'),
-                                                  )
-                                                ],
-                                              );
-                                            });
-                                      } else {
-                                        String roomNumber = sharedPreferences
-                                            .getString('room_num');
-                                        if (roomNumber == null)
-                                          roomNumber =
-                                              "${chatroom['room_num']}";
-                                        else
-                                          roomNumber = roomNumber +
-                                              ",${chatroom['room_num']}";
-                                        sharedPreferences.setString(
-                                            'room_num', roomNumber);
-
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) {
-                                              return ChatPage(
-                                                  chatroom['room_num'],
-                                                  widget._category);
-                                            },
-                                          ),
-                                        );
-                                      }
-                                    }),
                               ),
                             ),
                           ],

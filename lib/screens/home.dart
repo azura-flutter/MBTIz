@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trafit/screens/all_spot.dart';
-import 'package:trafit/util/popular_spots.dart';
 import 'package:trafit/widgets/grid_product.dart';
 import 'package:trafit/widgets/home_category.dart';
 import 'package:trafit/widgets/slider_item.dart';
+import 'package:trafit/util/const.dart';
 import 'package:trafit/util/travel_spots.dart';
 import 'package:trafit/util/categories.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "지금 뜨는 여행지",
+                  "지금 뜨는 MBTIz",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -67,10 +67,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
 
             SizedBox(height: 10.0),
 
-            //Slider Here
-
             CarouselSlider(
-              height: MediaQuery.of(context).size.height / 2.6,
+              height: MediaQuery.of(context).size.height / 2.8,
               items: map<Widget>(
                 travel_spots,
                 (index, i) {
@@ -87,71 +85,55 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               ).toList(),
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 10),
-//                enlargeCenterPage: true,
               viewportFraction: 1.0,
-//              aspectRatio: 2.0,
               onPageChanged: (index) {
                 setState(() {
                   _current = index;
                 });
               },
             ),
+            // SizedBox(height: 10.0),
+            // Text(
+            //   "찰떡궁합 MBTI",
+            //   style: TextStyle(
+            //     fontSize: 20,
+            //     fontWeight: FontWeight.w800,
+            //   ),
+            // ),
+            // SizedBox(height: 10.0),
 
-            Text(
-              "패키지 여행",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+            // Container(
+            //   height: 60.0,
+            //   child: ListView.builder(
+            //     scrollDirection: Axis.horizontal,
+            //     shrinkWrap: true,
+            //     itemCount: categories == null ? 0 : categories.length,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       Map cat = categories[index];
+            //       return HomeCategory(
+            //         icon: cat['icon'],
+            //         title: cat['name'],
+            //         items: cat['items'].toString(),
+            //         category_num: cat['category_num'],
+            //         img: cat['img'],
+            //         isHome: true,
+            //       );
+            //     },
+            //   ),
+            // ),
+
             SizedBox(height: 10.0),
-
-            Container(
-              height: 60.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: categories == null ? 0 : categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map cat = categories[index];
-                  return HomeCategory(
-                    icon: cat['icon'],
-                    title: cat['name'],
-                    items: cat['items'].toString(),
-                    category_num: cat['category_num'],
-                    img: cat['img'],
-                    isHome: true,
-                  );
-                },
-              ),
-            ),
-
-            SizedBox(height: 20.0),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "MBTI 찾기",
+                  "모든 MBTI 찾기",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-
-//                FlatButton(
-//                  child: Text(
-//                    "View More",
-//                    style: TextStyle(
-////                      fontSize: 22,
-////                      fontWeight: FontWeight.w800,
-//                      color: Theme
-//                          .of(context)
-//                          .accentColor,
-//                    ),
-//                  ),
-//                  onPressed: () {},
-//                ),
               ],
             ),
             SizedBox(height: 10.0),
@@ -163,16 +145,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height),
+                    (MediaQuery.of(context).size.height) /
+                    1.6,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
               ),
-              itemCount: popular_spots == null ? 0 : popular_spots.length,
+              itemCount: travel_spots == null ? 0 : travel_spots.length,
               itemBuilder: (BuildContext context, int index) {
-//                Food food = Food.fromJson(foods[index]);
                 Map travel_spot = travel_spots[index];
-//                print(foods);
-//                print(foods.length);
                 return GridProduct(
                   img: travel_spot['img'],
                   isFav: false,
