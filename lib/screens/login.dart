@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trafit/screens/join.dart';
 import 'package:trafit/screens/main_screen.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:trafit/screens/findID.dart';
@@ -29,7 +30,15 @@ class _LoginScreenState extends State<LoginScreen> {
             Icons.arrow_back,
             size: 30.0,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return JoinApp();
+                },
+              ),
+            )
+          },
         ),
       ),
       body: Padding(
@@ -200,13 +209,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 onPressed: () async {
-                  // Map<String, dynamic> response = await apiService.login(
-                  //    _useridControl.text, _passwordControl.text);
+                  Map<String, dynamic> response = await apiService.login(
+                      _useridControl.text, _passwordControl.text);
 
-                  // Fluttertoast.showToast(
-                  //   msg: response['message'],
-                  //   toastLength: Toast.LENGTH_LONG,
-                  // );
+                  Fluttertoast.showToast(
+                    msg: response['message'],
+                    toastLength: Toast.LENGTH_LONG,
+                  );
 
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -216,23 +225,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   );
 
-                  // if (response['code'] == 200) {
-                  //   SharedPreferences sharedPreferences =
-                  //       await SharedPreferences.getInstance();
-                  //   sharedPreferences.setString('id', _useridControl.text);
-                  //   sharedPreferences.setString('username', response['username']);
-                  //   sharedPreferences.setString('mbti', response['mbti']);
-                  //   sharedPreferences.setString('img', response['img']);
-                  //   sharedPreferences.setString('room_num', response['room_num']);
+                  if (response['code'] == 200) {
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    sharedPreferences.setString('id', _useridControl.text);
+                    sharedPreferences.setString(
+                        'username', response['username']);
+                    sharedPreferences.setString('mbti', response['mbti']);
+                    sharedPreferences.setString('img', response['img']);
+                    sharedPreferences.setString(
+                        'room_num', response['room_num']);
 
-                  //   Navigator.of(context).push(
-                  //     MaterialPageRoute(
-                  //       builder: (BuildContext context) {
-                  //         return MainScreen();
-                  //       },
-                  //     ),
-                  //   );
-                  // }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return MainScreen();
+                        },
+                      ),
+                    );
+                  }
                   //로그인 버튼 클릭시 user_email, user_password 서버에 보내고 User 정보 받아온 뒤 User list에 저장
                 },
                 color: Theme.of(context).accentColor,
