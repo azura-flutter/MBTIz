@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trafit/screens/join.dart';
 import 'package:trafit/screens/main_screen.dart';
+import 'package:trafit/screens/join.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:trafit/screens/findID.dart';
 import 'package:trafit/screens/findPassword.dart';
@@ -30,15 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
             Icons.arrow_back,
             size: 30.0,
           ),
-          onPressed: () => {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return JoinApp();
-                },
-              ),
-            )
-          },
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return JoinApp();
+              },
+            ),
+          ),
         ),
       ),
       body: Padding(
@@ -217,14 +216,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     toastLength: Toast.LENGTH_LONG,
                   );
 
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return MainScreen();
-                      },
-                    ),
-                  );
-
                   if (response['code'] == 200) {
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
@@ -244,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   }
-                  //로그인 버튼 클릭시 user_email, user_password 서버에 보내고 User 정보 받아온 뒤 User list에 저장
+                  // 로그인 버튼 클릭시 user_email, user_password 서버에 보내고 User 정보 받아온 뒤 User list에 저장
                 },
                 color: Theme.of(context).accentColor,
               ),
