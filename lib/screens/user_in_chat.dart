@@ -5,6 +5,7 @@ import 'package:trafit/screens/ChatPage.dart';
 import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:trafit/util/const.dart';
 import 'package:trafit/util/travel_spots.dart';
 
 ApiService apiService = new ApiService();
@@ -50,42 +51,16 @@ class _userInChatScreenState extends State<userInChatScreen> {
   Widget body(List rooms) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+        padding: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0),
         child: ListView(
           children: <Widget>[
-            SizedBox(height: 10.0),
-            SizedBox(height: 10.0),
             Text(
-              userName + '님의 참여 채팅방',
-//              "${foods[0]['name']}",
+              '참여 채팅 (${rooms.length}개)',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
               ),
               maxLines: 2,
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
-              child: Row(
-                children: <Widget>[
-//                  SmoothStarRating(
-//                    starCount: 5,
-//                    color: Constants.ratingBG,
-//                    allowHalfRating: true,
-//                    rating: 5.0,
-//                    size: 10.0,
-//                  ),
-//                  SizedBox(width: 10.0),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              "${rooms.length}개의 게시글",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w800,
-              ),
             ),
             SizedBox(height: 10.0),
             Padding(
@@ -131,7 +106,82 @@ class _userInChatScreenState extends State<userInChatScreen> {
                       elevation: 4.0,
                       child: ListTile(
                         leading: CircleAvatar(radius: 25.0, backgroundImage: c),
-                        title: Text("${chatroom['bossname']}"),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return ChatPage(
+                                    chatroom['room_num'], chatroom['category']);
+                              },
+                            ),
+                          );
+                        },
+                        title: Column(children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                      child: Row(
+                                    children: [
+                                      Text("${chatroom['bossname']}"),
+                                      Text("   $spot",
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              color: Constants.lightAccent)),
+                                    ],
+                                  )),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.highlight_off,
+                                    ),
+                                    iconSize: 25,
+                                    color: Colors.grey,
+                                    onPressed: () async {
+                                      sharedPreferences =
+                                          await SharedPreferences.getInstance();
+                                      String room_num = sharedPreferences
+                                          .getString('room_num');
+                                      String id =
+                                          sharedPreferences.getString('id');
+                                      String leave =
+                                          chatroom['room_num'].toString();
+                                      String update_room;
+                                      print(room_num);
+                                      print(id);
+                                      if (room_num.length == 1)
+                                        room_num.replaceAll(leave, '');
+                                      else if (index == 0) {
+                                        if (room_num[0] == ',') {
+                                          update_room = room_num.replaceAll(
+                                              ',' + leave, '');
+                                        } else {
+                                          update_room = room_num.replaceAll(
+                                              leave + ',', '');
+                                        }
+                                      } else
+                                        update_room = room_num.replaceAll(
+                                            ',' + leave, '');
+                                      sharedPreferences.setString(
+                                          'room_num', update_room);
+
+                                      apiService.leaveRoom(
+                                          id,
+                                          update_room,
+                                          chatroom['room_num'],
+                                          chatroom['boss'] == id);
+
+                                      setState(() {
+//                                            apiService.leaveRoom(name, chatroom['room_num']);
+                                        rooms.removeAt(index);
+                                      });
+                                    },
+                                  )
+                                ],
+                              ))
+                        ]),
                         subtitle: Column(
                           children: <Widget>[
                             Row(
@@ -147,46 +197,25 @@ class _userInChatScreenState extends State<userInChatScreen> {
                             ),
                             SizedBox(height: 10),
                             Padding(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(0),
                               child: Row(
                                 children: [
-                                  Text('여행지:  ',
-                                      style: TextStyle(color: Colors.black)),
-                                  Text("$spot",
+                                  Text("$start ~ $end",
                                       style: TextStyle(color: Colors.black)),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(4),
+                              padding: EdgeInsets.all(0),
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('여행일:  ',
-                                      style: TextStyle(color: Colors.black)),
-                                  Text("$start 부터 $end 까지",
-                                      style: TextStyle(color: Colors.black)),
-                                ],
-                              ),
-                            ),
-//                          Card(
-//                            child: Row(
-//                              children: [
-//                                Text('여행일:  '),
-//                                Text("${chatroom['start_date']} ~ ${chatroom['end_date']}"),
-//                              ],
-//                            ),
-//                          ),
-                            Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Row(
-                                children: [
-                                  Text('내용:  ',
-                                      style: TextStyle(color: Colors.black)),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         MediaQuery.of(context)
                                             .devicePixelRatio /
-                                        5.0,
+                                        6.0,
                                     child: Text(
                                       chatroom['comment'],
                                       style: TextStyle(color: Colors.black),
@@ -203,80 +232,7 @@ class _userInChatScreenState extends State<userInChatScreen> {
                                     5.0,
                                 child: Row(
                                   children: [
-                                    FlatButton(
-                                        child: Text(
-                                          "채팅방 입장",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        color: Colors.indigo[300],
-                                        textColor: Colors.white,
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) {
-                                                return ChatPage(
-                                                    chatroom['room_num'],
-                                                    chatroom['category']);
-                                              },
-                                            ),
-                                          );
-                                        }),
                                     SizedBox(width: 10.0),
-                                    FlatButton(
-                                        child: Text(
-                                          "채팅방 나가기",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        color: Colors.indigo[300],
-                                        textColor: Colors.white,
-                                        onPressed: () async {
-                                          sharedPreferences =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          String room_num = sharedPreferences
-                                              .getString('room_num');
-                                          String id =
-                                              sharedPreferences.getString('id');
-                                          String leave =
-                                              chatroom['room_num'].toString();
-                                          String update_room;
-                                          print(room_num);
-                                          print(id);
-                                          if (room_num.length == 1)
-                                            room_num.replaceAll(leave, '');
-                                          else if (index == 0) {
-                                            if (room_num[0] == ',') {
-                                              update_room = room_num.replaceAll(
-                                                  ',' + leave, '');
-                                            } else {
-                                              update_room = room_num.replaceAll(
-                                                  leave + ',', '');
-                                            }
-                                          } else
-                                            update_room = room_num.replaceAll(
-                                                ',' + leave, '');
-                                          sharedPreferences.setString(
-                                              'room_num', update_room);
-
-                                          apiService.leaveRoom(
-                                              id,
-                                              update_room,
-                                              chatroom['room_num'],
-                                              chatroom['boss'] == id);
-
-                                          setState(() {
-//                                            apiService.leaveRoom(name, chatroom['room_num']);
-                                            rooms.removeAt(index);
-                                          });
-                                        }),
                                   ],
                                 ),
                               ),

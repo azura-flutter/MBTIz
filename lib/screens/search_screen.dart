@@ -9,6 +9,7 @@ import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:trafit/util/travel_spots.dart';
+import 'package:trafit/util/const.dart';
 
 ApiService apiService = new ApiService();
 SharedPreferences sharedPreferences;
@@ -510,7 +511,13 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                         Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Row(
-                              children: [Text("${chatroom['bossname']}")],
+                              children: [
+                                Text("${chatroom['bossname']}"),
+                                Text("   $spot",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: Constants.lightAccent)),
+                              ],
                             ))
                       ]),
                       subtitle: Column(
@@ -531,8 +538,6 @@ class _chatSearchScreenState extends State<chatSearchScreen> {
                             padding: const EdgeInsets.all(0),
                             child: Row(
                               children: [
-                                Text("$spot  ",
-                                    style: TextStyle(color: Colors.black)),
                                 Text("$start ~ $end ",
                                     style: TextStyle(color: Colors.black)),
                               ],

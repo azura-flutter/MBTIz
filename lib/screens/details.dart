@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 ApiService apiService = new ApiService();
 
 Future<List> call(String category) async {
-  return await apiService.show_room(category);
+  return apiService.show_room(category);
 }
 
 class ProductDetails extends StatefulWidget {
@@ -108,9 +108,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                         int.parse(chatroom['end_date'].substring(2, 4)));
                     String end = DateFormat('M월d일').format(endTime).toString();
                     ImageProvider c;
-                    String spot =
-                        travel_spots[int.parse(chatroom['category']) - 1]
-                            ['name'];
 
                     if (chatroom['img'] == 'x') {
                       if (chatroom['bossmbti'] != null)
@@ -131,45 +128,45 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onTap: () async {
                           SharedPreferences sharedPreferences =
                               await SharedPreferences.getInstance();
-                          // Map<String, dynamic> isDeny =
-                          //     await apiService.deny_check(chatroom['room_num'],
-                          //         sharedPreferences.getString('id'));
-                          // if (isDeny['message']) {
-                          //   showDialog(
-                          //       context: context,
-                          //       builder: (BuildContext context) {
-                          //         return AlertDialog(
-                          //           title: Text('알림'),
-                          //           content: Text('강퇴된 채팅방입니다.'),
-                          //           actions: <Widget>[
-                          //             FlatButton(
-                          //               onPressed: () {
-                          //                 Navigator.of(context).pop();
-                          //               },
-                          //               child: Text('닫기'),
-                          //             )
-                          //           ],
-                          //         );
-                          //       });
-                          // } else {
-                          String roomNumber =
-                              sharedPreferences.getString('room_num');
-                          if (roomNumber == null)
-                            roomNumber = "${chatroom['room_num']}";
-                          else
-                            roomNumber =
-                                roomNumber + ",${chatroom['room_num']}";
-                          sharedPreferences.setString('room_num', roomNumber);
+                          Map<String, dynamic> isDeny =
+                              await apiService.deny_check(chatroom['room_num'],
+                                  sharedPreferences.getString('id'));
+                          if (isDeny['message']) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('알림'),
+                                    content: Text('강퇴된 채팅방입니다.'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('닫기'),
+                                      )
+                                    ],
+                                  );
+                                });
+                          } else {
+                            String roomNumber =
+                                sharedPreferences.getString('room_num');
+                            if (roomNumber == null)
+                              roomNumber = "${chatroom['room_num']}";
+                            else
+                              roomNumber =
+                                  roomNumber + ",${chatroom['room_num']}";
+                            sharedPreferences.setString('room_num', roomNumber);
 
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return ChatPage(
-                                    chatroom['room_num'], chatroom['category']);
-                              },
-                            ),
-                          );
-                          //       }
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return ChatPage(chatroom['room_num'],
+                                      chatroom['category']);
+                                },
+                              ),
+                            );
+                          }
                         },
                         leading: CircleAvatar(radius: 25.0, backgroundImage: c),
                         title: Column(children: <Widget>[
@@ -197,8 +194,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                               padding: const EdgeInsets.all(0),
                               child: Row(
                                 children: [
-                                  Text("$spot  ",
-                                      style: TextStyle(color: Colors.black)),
                                   Text("$start ~ $end ",
                                       style: TextStyle(color: Colors.black)),
                                 ],
@@ -240,6 +235,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: Text(
             "게시글 작성하기",
             style: TextStyle(
+              fontSize: 20,
               color: Colors.white,
             ),
           ),
