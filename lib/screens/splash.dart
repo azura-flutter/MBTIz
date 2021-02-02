@@ -52,12 +52,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // socketIO = SocketIOManager().createSocketIO(
-    //   'http://$myIP:3002',
-    //   '/',
-    // );
-    // socketIO.init();
-    // socketIO.connect();
+    socketIO = SocketIOManager().createSocketIO(
+      'http://$myIP:3002',
+      '/',
+    );
+    socketIO.init();
+    socketIO.connect();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
