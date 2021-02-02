@@ -9,6 +9,7 @@ import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trafit/util/const.dart';
 import 'package:trafit/util/mbti_result.dart';
 
 ApiService apiService = new ApiService();
@@ -27,6 +28,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   Widget photo;
+  String photoS;
   bool x = false;
   Future<List> comments;
 
@@ -69,14 +71,21 @@ class _ProfileState extends State<Profile> {
                 photo = Image.asset('assets/mbti/' +
                     sharedPreferences.getString('mbti') +
                     '.png');
+                photoS = 'assets/mbti/' +
+                    sharedPreferences.getString('mbti') +
+                    '.png';
               } else {
+                photoS =
+                    'http://$myIP:3001/${sharedPreferences.getString('img')}';
                 photo = CachedNetworkImage(
                     imageUrl:
                         'http://$myIP:3001/${sharedPreferences.getString('img')}');
               }
             }
-          } else
+          } else {
+            photoS = 'assets/person.png';
             photo = Image.asset('assets/person.png');
+          }
 
           if (sharedPreferences.getString('mbti') == null)
             return Scaffold(
@@ -91,7 +100,7 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: Icon(
                       Icons.settings,
-                      size: 30.0,
+                      size: 25.0,
                     ),
                     onPressed: () async {
                       SharedPreferences sharedPreferences =
@@ -118,15 +127,26 @@ class _ProfileState extends State<Profile> {
                         Column(
                           children: <Widget>[
                             Container(
-                              width: 100,
-                              height: 100,
-                              child: FlatButton(
-                                child: photo,
-                                onPressed: () => onPhoto(ImageSource.gallery),
-                              ),
-                            ),
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                width: 80,
+                                height: 80,
+                                child: Material(
+                                  elevation: 4.0,
+                                  shape: CircleBorder(),
+                                  clipBehavior: Clip.hardEdge,
+                                  color: Colors.white,
+                                  child: Ink.image(
+                                    image: AssetImage(photoS),
+                                    fit: BoxFit.cover,
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: InkWell(
+                                      onTap: () => onPhoto(ImageSource.gallery),
+                                    ),
+                                  ),
+                                )),
                             SizedBox(
-                              height: 3,
+                              height: 10,
                             ),
                             Text(
                               sharedPreferences.getString('username'),
@@ -155,7 +175,7 @@ class _ProfileState extends State<Profile> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    color: Colors.indigo[300],
+                                    color: Constants.lightAccent,
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -207,7 +227,7 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: Icon(
                       Icons.settings,
-                      size: 30.0,
+                      size: 25.0,
                     ),
                     onPressed: () async {
                       SharedPreferences sharedPreferences =
@@ -230,19 +250,31 @@ class _ProfileState extends State<Profile> {
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
                             Container(
-                              width: 100,
-                              height: 100,
-                              child: FlatButton(
-                                child: photo,
-                                onPressed: () => onPhoto(ImageSource.gallery),
-                              ),
-                            ),
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                width: 80,
+                                height: 80,
+                                child: Material(
+                                  elevation: 4.0,
+                                  shape: CircleBorder(),
+                                  clipBehavior: Clip.hardEdge,
+                                  color: Colors.transparent,
+                                  child: Ink.image(
+                                    image: AssetImage(photoS),
+                                    fit: BoxFit.cover,
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: InkWell(
+                                      onTap: () => onPhoto(ImageSource.gallery),
+                                    ),
+                                  ),
+                                )),
                             SizedBox(
-                              height: 3,
+                              height: 10,
                             ),
                             Text(
                               sharedPreferences.getString('username'),
@@ -257,15 +289,13 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width *
-                              MediaQuery.of(context).devicePixelRatio /
-                              4.5,
+                          padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 child: Row(
                                   children: <Widget>[
-                                    Text(' '),
                                     Text(
                                       sharedPreferences.getString('mbti'),
                                       style: TextStyle(
@@ -281,12 +311,13 @@ class _ProfileState extends State<Profile> {
                                   ],
                                 ),
                               ),
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * .6),
-                                child: Text(mbti_result[index]['comment']),
-                              )
+                              Text(mbti_result[index]['comment']),
+                              // ConstrainedBox(
+                              //   constraints: BoxConstraints(
+                              //       maxWidth:
+                              //           MediaQuery.of(context).size.width / 3),
+                              //   child: Text(mbti_result[index]['comment']),
+                              // )
                             ],
                           ),
                         )
