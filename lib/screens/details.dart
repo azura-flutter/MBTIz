@@ -80,7 +80,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "${rooms.length}개의 게시글",
+                    "${rooms.length}개의 채팅",
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
@@ -241,12 +241,14 @@ class _ProductDetailsState extends State<ProductDetails> {
         height: 50.0,
         child: RaisedButton(
           child: Text(
-            "게시글 작성하기",
+            "새 채팅 만들기",
             style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
           ),
-          color: Colors.indigo[300],
+          color: Constants.lightAccent,
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
