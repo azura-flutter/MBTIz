@@ -741,17 +741,6 @@ class ChatScreenState extends State<ChatPage> with TickerProviderStateMixin {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            String room_num = shared.getString('room_num');
-            String leave = widget.num.toString();
-            String update_room;
-
-            if (room_num.length == 1)
-              room_num.replaceAll(leave, '');
-            else {
-              update_room = room_num.replaceAll(',' + leave, '');
-            }
-
-            shared.setString('room_num', update_room);
             socketIO.sendMessage(
                 'send_leave',
                 jsonEncode({
@@ -762,8 +751,8 @@ class ChatScreenState extends State<ChatPage> with TickerProviderStateMixin {
                   'img': shared.getString('img'),
                   'type': 'leave'
                 }));
-            apiService.leaveRoom(shared.getString('id'), update_room,
-                widget.num, bossid == shared.getString('id'));
+            apiService.leaveRoom(shared.getString('id'), widget.num,
+                bossid == shared.getString('id'));
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             Navigator.of(context).pop();
