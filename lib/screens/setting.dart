@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trafit/providers/app_provider.dart';
 import 'package:trafit/screens/Mbti_ei_screen.dart';
-import 'package:trafit/screens/login.dart';
+import 'package:trafit/screens/join.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:trafit/util/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,18 +90,26 @@ class _SettingState extends State<Setting> {
                   child: Row(
                     children: <Widget>[
                       InkWell(
-                        onTap: () async {
-                          SharedPreferences sharedPreferences =
-                              await SharedPreferences.getInstance();
-                          sharedPreferences.setString('id', null);
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return LoginScreen();
-                              },
-                            ),
-                          );
+                        onTap: () {
+                          //첫 페이지 위젯으로 이동하면서 연결된 모든 위젯을 트리에서 삭제
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => JoinApp()),
+                              (route) => false);
                         },
+                        // onTap: () async {
+                        //   SharedPreferences sharedPreferences =
+                        //       await SharedPreferences.getInstance();
+                        //   sharedPreferences.setString('id', null);
+                        //   Navigator.of(context).push(
+                        //     MaterialPageRoute(
+                        //       builder: (BuildContext context) {
+                        //         return LoginScreen();
+                        //       },
+                        //     ),
+                        //   );
+                        // },
                         child: Text(
                           "로그아웃",
                           style: TextStyle(
