@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trafit/screens/cart.dart';
 import 'package:trafit/screens/home.dart';
+import 'package:trafit/screens/post_screen.dart';
 import 'package:trafit/screens/notifications.dart';
 import 'package:trafit/screens/profile.dart';
 import 'package:trafit/util/const.dart';
 import 'package:trafit/widgets/badge.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trafit/screens/user_in_chat.dart';
 import 'package:trafit/screens/search_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -150,15 +152,58 @@ class _MainScreenState extends State<MainScreen> {
             //shape: CircularNotchedRectangle(),
           ),
         ),
-//        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-//        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//        floatingActionButton: FloatingActionButton(
-//          elevation: 4.0,
-//          child: Icon(
-//            Icons.search,
-//          ),
-//          onPressed: ()=>_pageController.jumpToPage(2),
-//        ),//검색 아이콘(center)
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+            elevation: 4.0,
+            child: Icon(
+              Icons.add,
+              size: 35.0,
+            ),
+            onPressed: () async {
+              SharedPreferences sharedPreferences =
+                  await SharedPreferences.getInstance();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    if (sharedPreferences.getString('mbti') == 'ENFJ')
+                      return Postscreen('1');
+                    else if (sharedPreferences.getString('mbti') == 'ENFP')
+                      return Postscreen('2');
+                    else if (sharedPreferences.getString('mbti') == 'ENTJ')
+                      return Postscreen('3');
+                    else if (sharedPreferences.getString('mbti') == 'ENFP')
+                      return Postscreen('4');
+                    else if (sharedPreferences.getString('mbti') == 'ESFJ')
+                      return Postscreen('5');
+                    else if (sharedPreferences.getString('mbti') == 'ESFP')
+                      return Postscreen('6');
+                    else if (sharedPreferences.getString('mbti') == 'ISTP')
+                      return Postscreen('7');
+                    else if (sharedPreferences.getString('mbti') == 'ISTJ')
+                      return Postscreen('8');
+                    else if (sharedPreferences.getString('mbti') == 'ISFP')
+                      return Postscreen('9');
+                    else if (sharedPreferences.getString('mbti') == 'ISFJ')
+                      return Postscreen('10');
+                    else if (sharedPreferences.getString('mbti') == 'INTJ')
+                      return Postscreen('11');
+                    else if (sharedPreferences.getString('mbti') == 'INTP')
+                      return Postscreen('12');
+                    else if (sharedPreferences.getString('mbti') == 'INFP')
+                      return Postscreen('13');
+                    else if (sharedPreferences.getString('mbti') == 'INFJ')
+                      return Postscreen('14');
+                    else if (sharedPreferences.getString('mbti') == 'ESTP')
+                      return Postscreen('15');
+                    else if (sharedPreferences.getString('mbti') == 'ESTJ')
+                      return Postscreen('16');
+
+                    return Postscreen('17');
+                  },
+                ),
+              );
+            }), //검색 아이콘(center)
       ),
     );
   }

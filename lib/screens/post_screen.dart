@@ -18,11 +18,9 @@ Future<SharedPreferences> call() async {
 }
 
 class Postscreen extends StatefulWidget {
-  final String _name;
-  final String _img;
   final String _category;
 
-  Postscreen(this._name, this._img, this._category);
+  Postscreen(this._category);
 
   @override
   _PostscreenState createState() => _PostscreenState();
@@ -54,6 +52,7 @@ class _PostscreenState extends State<Postscreen> {
         builder:
             (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
           if (snapshot.hasData) {
+            print(widget._category);
             return body(snapshot.data);
           } else {
             return Text('');
@@ -359,7 +358,6 @@ class _PostscreenState extends State<Postscreen> {
                       'room_num', room_num + ',' + room.toString());
                   print('asdas' + room.toString());
                   Navigator.pop(context);
-                  Navigator.pop(context);
                 },
               ),
             ),
@@ -387,21 +385,5 @@ class _PostscreenState extends State<Postscreen> {
       toastLength: Toast.LENGTH_LONG,
     );
     room = response['room'];
-
-    /*setState(() {
-      chatrooms.add({
-//        "img": "assets/cm1.jpeg",
-//        "comment": "$_comment",
-//        "name": "JeeWon Lee"
-        "user_id": "z1top133",
-        "user_photo": "assets/jeewon.jpg",
-        "user_name": "이지원",
-        "comment": "$_comment",
-        "chatlog_flag": "sd",
-        "num": "1",
-        "max_num": "5",
-        "category": "$category",
-      });
-    });*/
   }
 }
