@@ -10,8 +10,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 ApiService apiService = new ApiService();
+SharedPreferences sharedPreferences;
 
 Future<List> call(String category) async {
+  sharedPreferences = await SharedPreferences.getInstance();
   return apiService.show_room(category);
 }
 
@@ -53,9 +55,18 @@ class _ProductDetailsState extends State<ProductDetails> {
         });
   }
 
+  double getBottomNavigatorHeight(String mbti) {
+    if (sharedPreferences.getString('mbti') == widget._name ||
+        widget._name == 'ALL')
+      return 50.0;
+    else
+      return 0.0;
+  }
+
   Widget body(List rooms) {
     double phoneWidth = MediaQuery.of(context).size.width;
     double ratio = MediaQuery.of(context).devicePixelRatio;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -238,7 +249,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 50.0,
+        height: getBottomNavigatorHeight(sharedPreferences.getString('mbti')),
         child: RaisedButton(
           child: Text(
             "새 채팅 만들기",
@@ -253,8 +264,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return Postscreen(
-                      widget._img, widget._name, widget._category);
+                  return Postscreen(widget._category);
                 },
               ),
             );
