@@ -183,35 +183,20 @@ class _userInChatScreenState extends State<userInChatScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(0),
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         MediaQuery.of(context)
                                             .devicePixelRatio /
-                                        6.0,
+                                        5.0,
                                     child: Text(
                                       chatroom['comment'],
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 50.0, 0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width *
-                                    MediaQuery.of(context).devicePixelRatio /
-                                    5.0,
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 10.0),
-                                  ],
-                                ),
                               ),
                             ),
                           ],
@@ -223,7 +208,6 @@ class _userInChatScreenState extends State<userInChatScreen> {
                 },
               ),
             ),
-            SizedBox(height: 10.0),
           ],
         ),
       ),
