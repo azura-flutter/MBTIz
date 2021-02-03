@@ -38,6 +38,7 @@ dependencies:
   table_calendar: ^2.2.3
   calendar_strip: ^1.0.6
   flutter_calendar_carousel: ^1.4.12
+  iamport_flutter: ^0.9.13
 
 dev_dependencies:
   flutter_test:

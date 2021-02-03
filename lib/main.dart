@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:trafit/providers/app_provider.dart';
 import 'package:trafit/screens/splash.dart';
 import 'package:trafit/util/const.dart';
+import './screens/register.dart';
+import './screens/certification.dart';
 
 import 'util/const.dart';
 
@@ -19,11 +21,15 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (BuildContext context, AppProvider appProvider, Widget child) {
-
         return MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/register': (context) => RegisterScreen(),
+            '/certification': (context) => Certification(),
+          },
           key: appProvider.key,
           debugShowCheckedModeBanner: false,
           navigatorKey: appProvider.navigatorKey,
