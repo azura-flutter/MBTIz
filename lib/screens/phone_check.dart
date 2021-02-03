@@ -20,7 +20,7 @@ class _PhoneCheckState extends State<PhoneCheck> {
   final _formKey = GlobalKey<FormState>();
   String merchantUid; // 주문번호
   String company = '아임포트'; // 회사명 또는 URL
-  String carrier = 'SKT'; // 통신사
+  String carrier; // 통신사
   String name; // 본인인증 할 이름
   String phone; // 본인인증 할 전화번호
   String minAge = '20'; // 최소 허용 만 나이
