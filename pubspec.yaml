@@ -119,6 +119,9 @@ flutter:
     - assets/mbti/ISTJ.png
     - assets/mbti/ISTP.png
     - assets/mbti/ALL.png
+    - assets/mbti/walk1.png
+    - assets/mbti/walk2.png
+    - assets/mbti/walk3.png
     - assets/skydiving.jpg
     - assets/pisa.jpg
     - assets/snapphoto.jpg
