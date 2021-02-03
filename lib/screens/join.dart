@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trafit/screens/login.dart';
-import 'package:trafit/screens/register.dart';
+import 'package:trafit/screens/phone_check.dart';
 import 'package:flutter/services.dart';
 
 class JoinApp extends StatefulWidget {
@@ -132,7 +132,7 @@ class _JoinAppState extends State<JoinApp> with SingleTickerProviderStateMixin {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) {
-                            return RegisterScreen();
+                            return PhoneCheck();
                           },
                         ),
                       );

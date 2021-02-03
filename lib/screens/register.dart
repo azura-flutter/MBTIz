@@ -26,8 +26,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String dropdownValue_gender = '남';
   int emailauthCheck = 0;
   bool emailCheck = false;
+
+  final _formKey = GlobalKey<FormState>();
+  String merchantUid; // 주문번호
+  String company = '아임포트'; // 회사명 또는 URL
+  String carrier = 'SKT'; // 통신사
+  String name; // 본인인증 할 이름
+  String phone; // 본인인증 할 전화번호
+  String minAge = '20'; // 최소 허용 만 나이
+
   @override
   Widget build(BuildContext context) {
+    Map<String, String> result = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -108,20 +119,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              String abc = await apiService.Id_check(
-                                  _useridControl.text);
-//                            String abc = '중복되지 않음';
-                              if (abc == '중복되지 않음') {
-                                idCheck = 0;
+                              if (_useridControl.text == '') {
                                 Fluttertoast.showToast(
-                                  msg: "사용 가능한 아이디입니다.",
+                                  msg: "아이디를 입력해주세요.",
                                   toastLength: Toast.LENGTH_LONG,
                                 );
                               } else {
-                                Fluttertoast.showToast(
-                                  msg: "이미 사용 중인 아이디입니다.",
-                                  toastLength: Toast.LENGTH_LONG,
-                                );
+                                String abc = await apiService.Id_check(
+                                    _useridControl.text);
+//                            String abc = '중복되지 않음';
+                                if (abc == '중복되지 않음') {
+                                  idCheck = 0;
+                                  Fluttertoast.showToast(
+                                    msg: "사용 가능한 아이디입니다.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "이미 사용 중인 아이디입니다.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                  );
+                                }
                               }
                             },
                             color: Theme.of(context).accentColor,
@@ -182,44 +200,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Card(
               elevation: 3.0,
               child: Container(
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(5.0),
                   ),
                 ),
-                child: TextField(
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.black,
+                child: Row(children: <Widget>[
+                  Icon(
+                    Icons.perm_identity,
                   ),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    hintText: "이름",
-                    prefixIcon: Icon(
-                      Icons.face,
-                      color: Colors.black,
-                    ),
-                    hintStyle: TextStyle(
+                  SizedBox(width: 15.0),
+                  Text(
+                    result['name'],
+                    style: TextStyle(
                       fontSize: 15.0,
-                      color: Colors.grey,
                     ),
-                  ),
-                  maxLines: 1,
-                  controller: _usernameControl, //유저이름 컨트롤러
-                ),
+                  )
+                ]),
               ),
             ),
             SizedBox(height: 10.0),
@@ -233,161 +232,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 10),
                   child: Row(
                     children: <Widget>[
                       Icon(
                         Icons.mail_outline,
                       ),
                       SizedBox(width: 15.0),
-                      Flexible(
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(0.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            hintText: "010-0000-0000",
-                            hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          maxLines: 1,
-                          controller: _emailControl, //이메일 컨트롤러
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 30,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-                          child: RaisedButton(
-                            child: Text(
-                              "전송".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () async {
-                              String ajouEmail = _emailControl.text;
-                              if (ajouEmail.split('@')[1] != 'ajou.ac.kr') {
-                                Fluttertoast.showToast(
-                                  msg: "학교 이메일을 입력하세요!",
-                                  toastLength: Toast.LENGTH_LONG,
-                                );
-                              } else {
-                                emailCheck = true;
-                                Fluttertoast.showToast(
-                                  msg: "이메일을 확인해주세요",
-                                  toastLength: Toast.LENGTH_LONG,
-                                );
-                              }
-                              if (emailCheck) {
-                                String abc = await apiService
-                                    .emailAuth(_emailControl.text);
-                                print(abc);
-                              }
-                            },
-                            color: Theme.of(context).accentColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Card(
-              elevation: 3.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.send,
-                      ),
-                      SizedBox(width: 15.0),
-                      Flexible(
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(0.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            hintText: "인증번호",
-                            hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          maxLines: 1,
-                          controller: _emailcodeControl, //이메일 컨트롤러
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 30,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-                          child: RaisedButton(
-                            child: Text(
-                              "인증".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () async {
-                              String message = await apiService
-                                  .emailauthCheck(_emailcodeControl.text);
-                              if (message == '인증성공') {
-                                emailauthCheck = 1;
-                                Fluttertoast.showToast(
-                                  msg: "인증이 완료되었습니다.",
-                                  toastLength: Toast.LENGTH_LONG,
-                                );
-                              }
-                            },
-                            color: Theme.of(context).accentColor,
-                          ),
+                      Text(
+                        result['phone'],
+                        style: TextStyle(
+                          fontSize: 15.0,
                         ),
                       ),
                     ],
@@ -623,8 +478,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   //if (emailauthCheck == 1) {
                   Map<String, dynamic> response = await apiService.register(
                       _useridControl.text,
-                      _usernameControl.text,
-                      _emailControl.text,
+                      result['name'],
+                      result['phone'],
                       _passwordControl.text,
                       genderCheck,
                       int.parse(dropdownValue_age),
@@ -656,9 +511,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
-  }
-
-  void _handleSubmitted(String value) {
-    _emailcodeControl.clear();
   }
 }
