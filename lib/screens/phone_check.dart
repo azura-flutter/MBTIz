@@ -165,16 +165,17 @@ class _PhoneCheckState extends State<PhoneCheck> {
                               ),
                             ),
                             onPressed: () async {
-                              bool existedNumber = false;
-                              //휴대폰 번호 중복 확인 코드 작성 부분
-                              //   = apiService.phonenumberCheck(_emailControl.text);
+                              Map<String, dynamic> noexisted = await apiService
+                                  .check_phoneNumber(_emailControl.text);
+
                               if (_emailControl.text == '' ||
                                   _usernameControl.text == '') {
                                 Fluttertoast.showToast(
                                   msg: "이름과 휴대전화를 모두 입력해주세요.",
                                   toastLength: Toast.LENGTH_LONG,
                                 );
-                              } else if (existedNumber) {
+                              } else if (!noexisted['flag']) {
+                                //false이면 중복이다.
                                 Fluttertoast.showToast(
                                   msg: "중복된 번호입니다.",
                                   toastLength: Toast.LENGTH_LONG,

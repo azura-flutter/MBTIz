@@ -56,6 +56,18 @@ class ApiService {
     return jsonDecode(response.body); //json으로 파싱
   }
 
+  Future<Map<String, dynamic>> check_phoneNumber(String phoneNumber) async {
+    Map<String, dynamic> pass = {
+      //변수를 json으로
+      'phoneNumber': phoneNumber
+    };
+
+    Response response = await post(_hostname() + '/check_phoneNumber',
+        headers: headers1, body: jsonEncode(pass));
+
+    return jsonDecode(response.body);
+  }
+
   Future<String> Id_check(_id) async {
     Map<String, dynamic> pass = {
       //변수를 json으로
