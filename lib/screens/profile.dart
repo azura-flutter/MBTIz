@@ -26,7 +26,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  Widget photo;
+  ImageProvider photo;
   bool x = false;
   Future<List> comments;
 
@@ -66,17 +66,17 @@ class _ProfileState extends State<Profile> {
             }
             if (!x) {
               if (sharedPreferences.getString('img') == 'x') {
-                photo = Image.asset('assets/mbti/' +
+                photo = AssetImage('assets/mbti/' +
                     sharedPreferences.getString('mbti') +
                     '.png');
               } else {
-                photo = CachedNetworkImage(
-                    imageUrl:
-                        'http://$myIP:3001/${sharedPreferences.getString('img')}');
+                photo = CachedNetworkImageProvider(
+                    'http://$myIP:3001/${sharedPreferences.getString('img')}');
               }
             }
-          } else
-            photo = Image.asset('assets/person.png');
+          } else {
+            photo = AssetImage('assets/person.png');
+          }
 
           if (sharedPreferences.getString('mbti') == null)
             return Scaffold(
@@ -117,12 +117,13 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 100,
-                              child: FlatButton(
-                                child: photo,
-                                onPressed: () => onPhoto(ImageSource.gallery),
+                            GestureDetector(
+                              onTap: () {
+                                onPhoto(ImageSource.gallery);
+                              },
+                              child: CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: photo,
                               ),
                             ),
                             SizedBox(
@@ -233,12 +234,13 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 100,
-                              child: FlatButton(
-                                child: photo,
-                                onPressed: () => onPhoto(ImageSource.gallery),
+                            GestureDetector(
+                              onTap: () {
+                                onPhoto(ImageSource.gallery);
+                              },
+                              child: CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: photo,
                               ),
                             ),
                             SizedBox(
@@ -457,7 +459,10 @@ class _ProfileState extends State<Profile> {
   void onPhoto(ImageSource source) async {
     File f = await ImagePicker.pickImage(
         source: source, maxWidth: 320, maxHeight: 240, imageQuality: 100);
-    setState(() => {x = true, photo = Image.memory(f.readAsBytesSync())});
+    setState(() => {
+          x = true,
+          photo = FileImage(f),
+        });
     Map<String, dynamic> response =
         await apiService.upload(f, sharedPreferences.getString('id'));
     Fluttertoast.showToast(
