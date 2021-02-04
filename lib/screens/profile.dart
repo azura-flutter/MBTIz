@@ -27,8 +27,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  Widget photo;
-  String photoS;
+  ImageProvider photo;
   bool x = false;
   Future<List> comments;
 
@@ -68,23 +67,16 @@ class _ProfileState extends State<Profile> {
             }
             if (!x) {
               if (sharedPreferences.getString('img') == 'x') {
-                photo = Image.asset('assets/mbti/' +
+                photo = AssetImage('assets/mbti/' +
                     sharedPreferences.getString('mbti') +
                     '.png');
-                photoS = 'assets/mbti/' +
-                    sharedPreferences.getString('mbti') +
-                    '.png';
               } else {
-                photoS =
-                    'http://$myIP:3001/${sharedPreferences.getString('img')}';
-                photo = CachedNetworkImage(
-                    imageUrl:
-                        'http://$myIP:3001/${sharedPreferences.getString('img')}');
+                photo = CachedNetworkImageProvider(
+                    'http://$myIP:3001/${sharedPreferences.getString('img')}');
               }
             }
           } else {
-            photoS = 'assets/person.png';
-            photo = Image.asset('assets/person.png');
+            photo = AssetImage('assets/person.png');
           }
 
           if (sharedPreferences.getString('mbti') == null)
@@ -126,25 +118,15 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Container(
-                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                width: 80,
-                                height: 80,
-                                child: Material(
-                                  elevation: 4.0,
-                                  shape: CircleBorder(),
-                                  clipBehavior: Clip.hardEdge,
-                                  color: Colors.white,
-                                  child: Ink.image(
-                                    image: AssetImage(photoS),
-                                    fit: BoxFit.cover,
-                                    width: 50.0,
-                                    height: 50.0,
-                                    child: InkWell(
-                                      onTap: () => onPhoto(ImageSource.gallery),
-                                    ),
-                                  ),
-                                )),
+                            GestureDetector(
+                              onTap: () {
+                                onPhoto(ImageSource.gallery);
+                              },
+                              child: CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: photo,
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -254,25 +236,15 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Container(
-                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                width: 80,
-                                height: 80,
-                                child: Material(
-                                  elevation: 4.0,
-                                  shape: CircleBorder(),
-                                  clipBehavior: Clip.hardEdge,
-                                  color: Colors.transparent,
-                                  child: Ink.image(
-                                    image: AssetImage(photoS),
-                                    fit: BoxFit.cover,
-                                    width: 50.0,
-                                    height: 50.0,
-                                    child: InkWell(
-                                      onTap: () => onPhoto(ImageSource.gallery),
-                                    ),
-                                  ),
-                                )),
+                            GestureDetector(
+                              onTap: () {
+                                onPhoto(ImageSource.gallery);
+                              },
+                              child: CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: photo,
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -488,7 +460,10 @@ class _ProfileState extends State<Profile> {
   void onPhoto(ImageSource source) async {
     File f = await ImagePicker.pickImage(
         source: source, maxWidth: 320, maxHeight: 240, imageQuality: 100);
-    setState(() => {x = true, photo = Image.memory(f.readAsBytesSync())});
+    setState(() => {
+          x = true,
+          photo = FileImage(f),
+        });
     Map<String, dynamic> response =
         await apiService.upload(f, sharedPreferences.getString('id'));
     Fluttertoast.showToast(
