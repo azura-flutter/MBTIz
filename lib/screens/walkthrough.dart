@@ -10,19 +10,19 @@ class Walkthrough extends StatefulWidget {
 class _WalkthroughState extends State<Walkthrough> {
   List pageInfos = [
     {
-      "title": "딱 맞는 동행",
+      "title": "딱 맞는 소통",
       "body": "MBTI로 성향 저격",
-      "img": "assets/on3.png",
+      "img": "assets/mbti/walk1.png",
     },
     {
-      "title": "안전한 동행",
+      "title": "안전한 소통",
       "body": "개인 정보는 최소한으로",
-      "img": "assets/on1.png",
+      "img": "assets/mbti/walk2.png",
     },
     {
-      "title": "신속한 동행",
+      "title": "신속한 소통",
       "body": "실시간 알림이 바로바로",
-      "img": "assets/on2.png",
+      "img": "assets/mbti/walk3.png",
     },
   ];
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trafit/screens/ChatPage.dart';
 import 'package:trafit/screens/notifications.dart';
-import 'package:trafit/util/travel_spots.dart';
+import 'package:trafit/util/const.dart';
 import 'package:trafit/screens/post_screen.dart';
 import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
@@ -10,8 +10,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 ApiService apiService = new ApiService();
+SharedPreferences sharedPreferences;
 
 Future<List> call(String category) async {
+  sharedPreferences = await SharedPreferences.getInstance();
   return apiService.show_room(category);
 }
 
@@ -53,9 +55,18 @@ class _ProductDetailsState extends State<ProductDetails> {
         });
   }
 
+  double getBottomNavigatorHeight(String mbti) {
+    if (sharedPreferences.getString('mbti') == widget._name ||
+        widget._name == 'ALL')
+      return 50.0;
+    else
+      return 0.0;
+  }
+
   Widget body(List rooms) {
     double phoneWidth = MediaQuery.of(context).size.width;
     double ratio = MediaQuery.of(context).devicePixelRatio;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -75,16 +86,20 @@ class _ProductDetailsState extends State<ProductDetails> {
         padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: ListView(
           children: <Widget>[
-            SizedBox(height: 10.0),
-            Text(
-              "${rooms.length}개의 게시글",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
+            Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "${rooms.length}개의 채팅",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 2,
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
               child: ListView.builder(
@@ -95,7 +110,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                 itemBuilder: (BuildContext context, int index) {
                   if (rooms.length != 0) {
                     Map chatroom = rooms[index];
-                    print(rooms[index]);
                     DateTime startTime = DateTime(
                         0,
                         int.parse(chatroom['start_date'].substring(0, 2)),
@@ -108,7 +122,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                         int.parse(chatroom['end_date'].substring(2, 4)));
                     String end = DateFormat('M월d일').format(endTime).toString();
                     ImageProvider c;
-
                     if (chatroom['img'] == 'x') {
                       if (chatroom['bossmbti'] != null)
                         c = Image.asset(
@@ -161,8 +174,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return ChatPage(chatroom['room_num'],
-                                      chatroom['category']);
+                                  return ChatPage(
+                                      chatroom['room_num'], widget._category);
                                 },
                               ),
                             );
@@ -173,7 +186,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                               padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                               child: Row(
-                                children: [Text("${chatroom['bossname']}")],
+                                children: [
+                                  Text("${chatroom['bossname']}   "),
+                                  Text(widget._name,
+                                      style: TextStyle(
+                                          fontSize: 19,
+                                          color: Constants.lightAccent)),
+                                ],
                               ))
                         ]),
                         subtitle: Column(
@@ -230,22 +249,22 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 50.0,
+        height: getBottomNavigatorHeight(sharedPreferences.getString('mbti')),
         child: RaisedButton(
           child: Text(
-            "게시글 작성하기",
+            "새 채팅 만들기",
             style: TextStyle(
               fontSize: 20,
+              fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
           ),
-          color: Colors.indigo[300],
+          color: Constants.lightAccent,
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return Postscreen(
-                      widget._img, widget._name, widget._category);
+                  return Postscreen(widget._category);
                 },
               ),
             );

@@ -9,6 +9,7 @@ import 'package:trafit/util/MyIP.dart';
 import 'package:trafit/util/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trafit/util/const.dart';
 import 'package:trafit/util/mbti_result.dart';
 
 ApiService apiService = new ApiService();
@@ -91,7 +92,7 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: Icon(
                       Icons.settings,
-                      size: 30.0,
+                      size: 25.0,
                     ),
                     onPressed: () async {
                       SharedPreferences sharedPreferences =
@@ -127,7 +128,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             SizedBox(
-                              height: 3,
+                              height: 10,
                             ),
                             Text(
                               sharedPreferences.getString('username'),
@@ -156,7 +157,7 @@ class _ProfileState extends State<Profile> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    color: Colors.indigo[300],
+                                    color: Constants.lightAccent,
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -208,7 +209,7 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: Icon(
                       Icons.settings,
-                      size: 30.0,
+                      size: 25.0,
                     ),
                     onPressed: () async {
                       SharedPreferences sharedPreferences =
@@ -231,6 +232,7 @@ class _ProfileState extends State<Profile> {
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
@@ -244,7 +246,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             SizedBox(
-                              height: 3,
+                              height: 10,
                             ),
                             Text(
                               sharedPreferences.getString('username'),
@@ -259,15 +261,13 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width *
-                              MediaQuery.of(context).devicePixelRatio /
-                              4.5,
+                          padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 child: Row(
                                   children: <Widget>[
-                                    Text(' '),
                                     Text(
                                       sharedPreferences.getString('mbti'),
                                       style: TextStyle(
@@ -283,12 +283,13 @@ class _ProfileState extends State<Profile> {
                                   ],
                                 ),
                               ),
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * .6),
-                                child: Text(mbti_result[index]['comment']),
-                              )
+                              Text(mbti_result[index]['comment']),
+                              // ConstrainedBox(
+                              //   constraints: BoxConstraints(
+                              //       maxWidth:
+                              //           MediaQuery.of(context).size.width / 3),
+                              //   child: Text(mbti_result[index]['comment']),
+                              // )
                             ],
                           ),
                         )

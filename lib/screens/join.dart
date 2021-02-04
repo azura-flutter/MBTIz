@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trafit/screens/login.dart';
-import 'package:trafit/screens/register.dart';
+import 'package:trafit/screens/phone_check.dart';
 import 'package:flutter/services.dart';
 
 class JoinApp extends StatefulWidget {
@@ -43,38 +43,6 @@ class _JoinAppState extends State<JoinApp> with SingleTickerProviderStateMixin {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        //   bottom: TabBar(
-        //     controller: _tabController,
-        //     indicatorColor: Theme.of(context).accentColor,
-        //     labelColor: Theme.of(context).accentColor,
-        //     unselectedLabelColor: Colors.grey,
-        //     labelStyle: TextStyle(
-        //       fontSize: 20.0,
-        //       fontWeight: FontWeight.w800,
-        //     ),
-        //     unselectedLabelStyle: TextStyle(
-        //       fontSize: 20.0,
-        //       fontWeight: FontWeight.w800,
-        //     ),
-        //     tabs: <Widget>[
-        //       Tab(
-        //         text: "회원가입",
-        //       ),
-        //       Tab(
-        //         text: "로그인",
-        //       ),
-        //     ],
-        //   ),
-        // ),
-
-        // body: TabBarView(
-        //   controller: _tabController,
-        //   children: <Widget>[
-        //     RegisterScreen(),
-        //     LoginScreen(),
-
-        //   ],
-        // ),
         body: Container(
           margin:
               EdgeInsets.only(top: 100, bottom: 50, left: 20.0, right: 20.0),
@@ -104,7 +72,7 @@ class _JoinAppState extends State<JoinApp> with SingleTickerProviderStateMixin {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    '당신을 위한 동행자가',
+                    '당신을 위한 친구가',
 //                  "${Constants.appName}",
                     style: TextStyle(
                       fontSize: 20.0,
@@ -116,7 +84,7 @@ class _JoinAppState extends State<JoinApp> with SingleTickerProviderStateMixin {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    '트래핏에서 기다리고 있어요!',
+                    'MBTIz에서 기다리고 있어요!',
 //                  "${Constants.appName}",
                     style: TextStyle(
                       fontSize: 20.0,
@@ -164,7 +132,7 @@ class _JoinAppState extends State<JoinApp> with SingleTickerProviderStateMixin {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) {
-                            return RegisterScreen();
+                            return PhoneCheck();
                           },
                         ),
                       );
